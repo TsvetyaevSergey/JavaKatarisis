@@ -2,7 +2,9 @@ package com.example.katarsisblog.controllers;
 
 import com.example.katarsisblog.models.Post;
 import com.example.katarsisblog.repo.PostRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
+@AllArgsConstructor
 public class BlogController {
     @Autowired
     private PostRepository postRepository;
@@ -23,11 +26,13 @@ public class BlogController {
     }
 
     @GetMapping("/blog/add")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public String blogAdd(Model model) {
         return "blog/blog-add";
     }
 
     @PostMapping("/blog/add")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blogPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model) {
         Post post = new Post(title, anons, full_text);
         postRepository.save(post);

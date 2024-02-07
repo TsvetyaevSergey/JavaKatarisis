@@ -1,34 +1,32 @@
 package com.example.katarsisblog.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Data
+@Table(name = "users")
 public class UserDTO {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
     @NotEmpty
-    private String firstName;
-
-    @NotNull
-    @NotEmpty
-    private String lastName;
+    @Column(unique = true)
+    private String name;
 
     @NotNull
     @NotEmpty
     private String password;
-    private String matchingPassword;
 
     @NotNull
     @NotEmpty
-    private String email;
+    @Column(unique = true)
+    private String roles;
 
     public Long getId() {
         return id;
@@ -38,20 +36,12 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -62,19 +52,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getMatchingPassword() {
-        return matchingPassword;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 }
