@@ -2,6 +2,8 @@ package com.example.katarsisblog.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @Table(name = "users")
 public class UserDTO {
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,8 +29,23 @@ public class UserDTO {
 
     @NotNull
     @NotEmpty
-    @Column(unique = true)
     private String roles;
+
+    @NotNull
+    @NotEmpty
+    @Column(unique = true)
+    private String email;
+
+
+    public UserDTO(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.roles = "ROLE_USER";
+    }
+
+    public UserDTO() {
+    }
 
     public Long getId() {
         return id;
@@ -58,5 +77,13 @@ public class UserDTO {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -26,7 +26,7 @@ public class BlogController {
     }
 
     @GetMapping("/blog/add")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blogAdd(Model model) {
         return "blog/blog-add";
     }
@@ -52,6 +52,7 @@ public class BlogController {
     }
 
     @GetMapping("/blog/{id}/edit")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blogEdit(@PathVariable(value = "id") long id, Model model) {
         if (!postRepository.existsById(id)) {
             return "redirect:/blog";
@@ -64,6 +65,7 @@ public class BlogController {
     }
 
     @PutMapping("/blog/{id}/edit")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blogPostUpdate(@PathVariable(value = "id") long id, @RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model) {
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(title);
@@ -74,6 +76,7 @@ public class BlogController {
     }
 
     @DeleteMapping("/blog/{id}/remove")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blogPostDelete(@PathVariable(value = "id") long id) {
         Post post = postRepository.findById(id).orElseThrow();
         postRepository.delete(post);

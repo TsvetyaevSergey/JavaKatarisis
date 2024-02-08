@@ -30,9 +30,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/new-user").permitAll()
-                        .requestMatchers("/**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll()
+                        .requestMatchers("/blog/add", "/blog/{id}/edit", "/blog/{id}/edit").authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
                 .build();
     }
 

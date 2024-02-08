@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Блог</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -13,8 +13,8 @@
         <h3 th:text="${el.title}"></h3>
         <p th:text="${el.full_text}"></p>
         <p><b>Просмотры</b> <span th:text="${el.views}"></span></p>
-        <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
-        <form th:action="'/blog/' + ${el.id} + '/remove'" th:method="delete">
+        <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning" sec:authorize="hasRole('ADMIN')" >Редактировать</a>
+        <form th:action="'/blog/' + ${el.id} + '/remove'" th:method="delete" sec:authorize="hasRole('ADMIN')">
             <button class="btn btn-warning" type="submit">Удалить</button>
         </form>
     </div>
