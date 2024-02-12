@@ -1,13 +1,14 @@
 package com.example.katarsisblog.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.List;
+
 @Entity
-public class Post {
+public class Exposition {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -15,6 +16,10 @@ public class Post {
     @NotEmpty
     private String title,anons,full_text;
     private int views;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "exp_id",referencedColumnName = "id")
+    private List<Image> imageList;
 
     public Long getId() {
         return id;
@@ -56,10 +61,18 @@ public class Post {
         this.views = views;
     }
 
-    public Post() {
+    public List<Image> getImageList() {
+        return imageList;
     }
 
-    public Post(String title, String anons, String full_text) {
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
+    }
+
+    public Exposition() {
+    }
+
+    public Exposition(String title, String anons, String full_text) {
         this.title = title;
         this.anons = anons;
         this.full_text = full_text;
