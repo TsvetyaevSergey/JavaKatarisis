@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Table(name = "users")
 public class UserDTO {
-    @Setter
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
