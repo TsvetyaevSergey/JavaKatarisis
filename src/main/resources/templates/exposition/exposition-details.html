@@ -8,16 +8,24 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 <div class="container mt-5">
-    <h1>Блог сайта</h1>
-    <div th:each="el : ${post}" class="alert alert-info mt-2">
-        <h3 th:text="${el.title}"></h3>
-        <p th:text="${el.full_text}"></p>
-        <p><b>Просмотры</b> <span th:text="${el.views}"></span></p>
-        <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning" sec:authorize="hasRole('ADMIN')" >Редактировать</a>
-        <form th:action="'/blog/' + ${el.id} + '/remove'" th:method="delete" sec:authorize="hasRole('ADMIN')">
+    <h1 th:text="${exposition.title}"></h1>
+        <p th:text="${exposition.full_text}"></p>
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col" th:each = "im : ${images}">
+                <div class="card shadow-sm">
+                    <img class="bd-placeholder-img card-img-top" th:src = "${im.url}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <p><b>Просмотры</b> <span th:text="${exposition.views}"></span></p>
+        <a th:href="'/exposition/' + ${exposition.id} + '/edit'" class="btn btn-warning" sec:authorize="hasRole('ADMIN')" >Редактировать</a>
+        <form th:action="'/exposition/' + ${exposition.id} + '/remove'" th:method="delete" sec:authorize="hasRole('ADMIN')">
             <button class="btn btn-warning" type="submit">Удалить</button>
         </form>
-    </div>
 </div>
 <header th:insert="blocks/footer :: footer"></header>
 </body>

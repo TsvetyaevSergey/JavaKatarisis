@@ -1,7 +1,9 @@
 package com.example.katarsisblog.controllers;
 
 import com.example.katarsisblog.models.Exposition;
+import com.example.katarsisblog.models.Image;
 import com.example.katarsisblog.repo.ExpositionRepository;
+import com.example.katarsisblog.repo.ImageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,11 +22,14 @@ public class ExpositionController {
     @Autowired
     private ExpositionRepository expositionRepository;
 
-    @GetMapping("/blog")
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @GetMapping("/exposition")
     public String expositionMain(Model model) {
         Iterable<Exposition> expositions = expositionRepository.findAll();
         model.addAttribute("expositions", expositions);
-        return "blog/blog-main";
+        return "exposition/exposition-main";
     }
 
     @GetMapping("/exposition/add")
@@ -33,8 +40,14 @@ public class ExpositionController {
 
     @PostMapping("/exposition/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String expositionPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text, Model model) {
-        Exposition exposition = new Exposition(title, anons, full_text);
+    public String expositionPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text, @RequestParam String urls, Model model) {
+        List<Image> images = new ArrayList<>();
+        ArrayList<String> splited_urls =  new ArrayList<>(Arrays.asList(urls.split("\n")));
+        for (String url : splited_urls) {
+            Image image = new Image(url);
+            images.add(image);
+        }
+        Exposition exposition = new Exposition(title, anons, full_text, images);
         expositionRepository.save(exposition);
         return "redirect:/exposition";
     }
@@ -44,10 +57,10 @@ public class ExpositionController {
         if (!expositionRepository.existsById(id)) {
             return "redirect:/exposition";
         }
-        Optional<Exposition> exposition = expositionRepository.findById(id);
-        ArrayList<Exposition> result = new ArrayList<>();
-        exposition.ifPresent(result::add);
-        model.addAttribute("exposition", result);
+        Exposition exposition = expositionRepository.findById(id).orElseThrow();
+        ArrayList<Image> images = new ArrayList<>(exposition.getImageList());
+        model.addAttribute("images",images);
+        model.addAttribute("exposition", exposition);
         return "exposition/exposition-details";
     }
 

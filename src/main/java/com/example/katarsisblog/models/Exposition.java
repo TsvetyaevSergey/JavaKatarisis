@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
+@Table(name = "exposition")
 public class Exposition {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,7 +19,7 @@ public class Exposition {
     private int views;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "exp_id",referencedColumnName = "id")
+    @JoinColumn(name = "exp",referencedColumnName = "id")
     private List<Image> imageList;
 
     public Long getId() {
@@ -72,9 +73,11 @@ public class Exposition {
     public Exposition() {
     }
 
-    public Exposition(String title, String anons, String full_text) {
+    public Exposition(String title, String anons, String full_text, List<Image> imageList) {
         this.title = title;
         this.anons = anons;
         this.full_text = full_text;
+        this.imageList = imageList;
+        this.views = 0;
     }
 }

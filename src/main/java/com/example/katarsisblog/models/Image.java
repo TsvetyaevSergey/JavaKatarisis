@@ -18,8 +18,14 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "add_id")
     private Long id;
-    @Column(unique = true)
+    @Column(unique = true,columnDefinition = "TEXT")
     @NotEmpty
     @NotNull
     private String url;
+
+
+
+    public Image(String url) {
+        this.url = url;
+    }
 }
