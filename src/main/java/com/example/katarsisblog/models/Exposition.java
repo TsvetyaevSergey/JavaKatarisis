@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -15,7 +16,10 @@ public class Exposition {
     private Long id;
 
     @NotEmpty
-    private String title,anons,full_text;
+    private String title,anons;
+    @NotEmpty
+    @Column(columnDefinition = "TEXT")
+    private String full_text;
     private int views;
 
     @OneToMany(cascade = CascadeType.ALL)

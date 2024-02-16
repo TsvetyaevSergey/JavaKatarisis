@@ -8,31 +8,25 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 <div class="container mt-5">
-    <h1 th:text="${exposition.title}"></h1>
-    <p th:text="${exposition.full_text}"></p>
+    <h1 th:text="${artImage.name}"></h1>
+    <p th:text="${artImage.description}"></p>
 
-    <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col" th:each="im : ${images}">
+
                 <div class="card shadow-sm border border-5">
-                    <img class="bd-placeholder-img card-img-top" th:src="${im.url}">
+                    <img class="bd-placeholder-img card-img-top" th:src = "${artImage.image.url}">
                 </div>
-            </div>
-        </div>
-    </div>
-    <p><b>Просмотры</b> <span th:text="${exposition.views}"></span></p>
 
     <div style="display: flex; flex-direction: row;">
 
-        <a th:href="'/exposition/' + ${exposition.id} + '/edit'" class="btn btn-warning"
+        <a th:href="'/art/' + ${art.id} + '/edit'" class="btn btn-warning"
            sec:authorize="hasRole('ADMIN')">Редактировать</a>
         <div style="margin-left: 10px;"></div>
-        <form th:action="'/exposition/' + ${exposition.id} + '/remove'" th:method="delete"
+        <form th:action="'/art/' + ${art.id} + '/remove'" th:method="delete"
               sec:authorize="hasRole('ADMIN')">
             <button class="btn btn-warning" type="submit">Удалить</button>
         </form>
     </div>
 </div>
-<header th:insert="blocks/footer :: footer"></header>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>
