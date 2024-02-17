@@ -13,15 +13,11 @@
 
 
                 <div class="card shadow-sm border border-5">
-                    <img class="bd-placeholder-img card-img-top" th:src = "${artImage.image.url}">
+                    <img class="bd-placeholder-img card-img-top" th:src = "${image.url}">
                 </div>
 
     <div style="display: flex; flex-direction: row;">
-
-        <a th:href="'/art/' + ${art.id} + '/edit'" class="btn btn-warning"
-           sec:authorize="hasRole('ADMIN')">Редактировать</a>
-        <div style="margin-left: 10px;"></div>
-        <form th:action="'/art/' + ${art.id} + '/remove'" th:method="delete"
+        <form th:action="'/art/' + ${artImage.id} + '/remove'" th:method="delete"
               sec:authorize="hasRole('ADMIN')">
             <button class="btn btn-warning" type="submit">Удалить</button>
         </form>

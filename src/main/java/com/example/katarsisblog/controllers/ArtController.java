@@ -52,7 +52,9 @@ public class ArtController {
             return "redirect:/art";
         }
         ArtImage artImage = artImageRepository.findById(id).orElseThrow();
+        Image image = imageRepository.findById(artImage.getImage().getId()).orElseThrow();
         model.addAttribute("artImage", artImage);
+        model.addAttribute("image", image);
         return "art/art-details";
     }
 
@@ -70,9 +72,9 @@ public class ArtController {
     @PutMapping("/art/{id}/edit")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String artostUpdate(@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String anons, @RequestParam String description, @RequestParam String url, Model model) {
-        ArtImage artImage = artImageRepository.findById(id).orElseThrow();
-        Image image = imageRepository.findById(artImage.getImage().getId()).orElseThrow();
-        imageRepository.deleteById(image.getId());
+        artImageRepository.deleteById(id);
+        ArtImage artImage = new ArtImage();
+        artImage.setId(id);
         artImage.setName(name);
         artImage.setAnons(anons);
         artImage.setDescription(description);

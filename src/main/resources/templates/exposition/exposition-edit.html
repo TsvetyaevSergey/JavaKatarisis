@@ -8,15 +8,14 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 <div class="container mt-5 mb-5">
-    <h1>Редактирование статьи</h1>
-    <div th:each="el : ${post}">
+    <h1>Редактирование выставки</h1>
         <form th:method="put">
-            <input type="text" th:value="${el.title}" name="title" placeholder="Введите название статьи" class="form-control"> <br>
-            <input type="text" th:value="${el.anons}" name="anons" placeholder="Введите анонс" class="form-control"> <br>
-            <textarea name="full_text" placeholder="Введите текст статьи" class="form-control" th:text="${el.full_text}"></textarea> <br>
+            <input type="text" th:value="${exposition.title}" name="title" placeholder="Введите название статьи" class="form-control"> <br>
+            <input type="text" th:value="${exposition.anons}" name="anons" placeholder="Введите анонс" class="form-control"> <br>
+            <textarea name="full_text" placeholder="Введите описание выставки" class="form-control" th:text="${exposition.full_text}"></textarea> <br>
+            <textarea name="full_text" placeholder="Вставьте ссылки на изображения" class="form-control" th:text="${images}"></textarea> <br>
             <button type="submit" class="btn btn-success">Изменить статью</button>
         </form>
-    </div>
 </div>
 <header th:insert="blocks/footer :: footer"></header>
 </body>

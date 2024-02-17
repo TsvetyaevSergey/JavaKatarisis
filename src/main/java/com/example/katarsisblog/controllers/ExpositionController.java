@@ -70,10 +70,14 @@ public class ExpositionController {
         if (!expositionRepository.existsById(id)) {
             return "redirect:/exposition";
         }
-        Optional<Exposition> exposition = expositionRepository.findById(id);
-        ArrayList<Exposition> result = new ArrayList<>();
-        exposition.ifPresent(result::add);
-        model.addAttribute("exposition", result);
+        Exposition exposition = expositionRepository.findById(id).orElseThrow();
+        ArrayList<Image> images = new ArrayList<>(exposition.getImageList());
+        StringBuilder sb = new StringBuilder();
+        for (Image image : images) {
+            sb.append(image.getUrl()).append("\n");
+        }
+        model.addAttribute("images",sb.toString());
+        model.addAttribute("exposition", exposition);
         return "exposition/exposition-edit";
     }
 
