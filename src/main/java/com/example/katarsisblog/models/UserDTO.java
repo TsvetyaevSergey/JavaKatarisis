@@ -34,19 +34,35 @@ public class UserDTO {
     @Column(unique = true)
     private String email;
 
+    @NotEmpty
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "favourite_id", referencedColumnName = "id")
+    private Favourites favourites;
 
-    public UserDTO(String name, String password, String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.roles = "ROLE_USER";
+    public Favourites getFavourites() {
+        return favourites;
     }
 
-    public UserDTO(String name, String password,String email, String roles ) {
+    public void setFavourites(Favourites favourites) {
+        this.favourites = favourites;
+    }
+
+    public UserDTO(String name, String password, String email, String roles,Favourites favourites ) {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.roles = roles;
+
+        switch (roles) {
+            case "admin":
+                this.roles = "ROLE_ADMIN";
+                break;
+            case "user":
+                this.roles = "ROLE_USER";
+                break;
+            default:
+                throw new IllegalArgumentException("Неизвестная роль: " + roles);
+        }
+        this.favourites = favourites;
     }
 
     public UserDTO() {

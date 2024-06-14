@@ -43,8 +43,20 @@ public class ExpositionController {
     public String expositionPostAdd(@RequestParam String title, @RequestParam String anons, @RequestParam String full_text, @RequestParam String urls, Model model) {
         List<Image> images = new ArrayList<>();
         ArrayList<String> splited_urls =  new ArrayList<>(Arrays.asList(urls.split("\n")));
+        List<Image> imageList = imageRepository.findAll();
+        ArrayList<String> imageListUrl = new ArrayList<>();
+        for (Image cur : imageList) {
+            imageListUrl.add(cur.getUrl());
+        }
         for (String url : splited_urls) {
-            Image image = new Image(url);
+            Image image;
+            if (!imageListUrl.contains(url))
+            {
+                image = new Image(url);
+            } else
+            {
+                image = imageRepository.findByUrl(url);
+            }
             images.add(image);
         }
         Exposition exposition = new Exposition(title, anons, full_text, images);

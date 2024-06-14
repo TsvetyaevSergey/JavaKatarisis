@@ -1,7 +1,9 @@
 package com.example.katarsisblog.controllers;
 
 import com.example.katarsisblog.exeption.UserAlreadyExistAuthenticationException;
+import com.example.katarsisblog.models.Favourites;
 import com.example.katarsisblog.models.UserDTO;
+import com.example.katarsisblog.repo.FavouritesRepository;
 import com.example.katarsisblog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,8 @@ public class RegistrationController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FavouritesRepository favouritesRepository;
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -27,14 +31,13 @@ public class RegistrationController {
     }
 
     @PostMapping("/new-user")
-    public String addUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, Model model) {
-        try {
-            UserDTO user = new UserDTO(username, passwordEncoder.encode(password), email);
+    public String addUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String role, Model model) {
+            UserDTO user = new UserDTO(username, passwordEncoder.encode(password), email, role, new Favourites());
             userRepository.save(user);
+            Favourites favourites = favouritesRepository.findById(user.getFavourites().getId()).orElseThrow();
+            favourites.setUserDTO(user);
+            favouritesRepository.save(favourites);
             return "redirect:/login";
-        } catch (Exception ignored) {
-            System.out.println(username + " Already Exist");
-            return "redirect:/registration";
-        }
+
     }
 }

@@ -12,13 +12,17 @@
     <p th:text="${artImage.description}"></p>
 
 
-                <div class="card shadow-sm border border-5">
-                    <img class="bd-placeholder-img card-img-top" th:src = "${image.url}">
-                </div>
+    <div class="card shadow-sm border border-5">
+        <img class="bd-placeholder-img card-img-top" th:src = "${artImage.image.url}">
+    </div>
 
     <div style="display: flex; flex-direction: row;">
-        <form th:action="'/art/' + ${artImage.id} + '/remove'" th:method="delete"
-              sec:authorize="hasRole('ADMIN')">
+
+        <form th:action="'/art/' + ${artImage.id} + '/edit'" th:method="post">
+            <button class="btn btn-warning" type="submit">Редактировать</button>
+        </form>
+        <div style="margin-left: 10px;"></div>
+        <form th:action="'/art/' + ${artImage.id} + '/remove'" th:method="delete">
             <button class="btn btn-warning" type="submit">Удалить</button>
         </form>
     </div>

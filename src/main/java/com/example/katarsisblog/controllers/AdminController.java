@@ -36,11 +36,4 @@ public class AdminController {
         userRepository.save(result);
         return "redirect:/";
     }
-
-    @PostMapping("/super-admin")
-    public ResponseEntity<String> superAdmin(Model model) {
-        UserDTO userDTO = new UserDTO("horoz",passwordEncoder.encode("123"),"serelaw@mail.ru","ROLE_ADMIN");
-        userRepository.save(userDTO);
-        return ResponseEntity.ok("Data saved");
-    }
 }

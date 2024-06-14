@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Set;
+
 @Entity
 @Transactional
 @Data
@@ -27,6 +29,9 @@ public class ArtImage {
     @JoinColumn(name = "url", referencedColumnName = "url")
     private Image image;
 
+    @ManyToMany(mappedBy = "artImages")
+    private Set<Favourites> favourites;
+
     public ArtImage(String name, String description, String anons, Image image) {
         this.name = name;
         this.description = description;
@@ -35,6 +40,10 @@ public class ArtImage {
     }
 
     public ArtImage() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -68,4 +77,5 @@ public class ArtImage {
     public void setImage(Image image) {
         this.image = image;
     }
+
 }

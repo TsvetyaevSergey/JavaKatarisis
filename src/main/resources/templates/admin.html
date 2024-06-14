@@ -4,22 +4,33 @@
     <title th:text="${title}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        .custom-button {
+            border-radius: 50px;
+            background-color: #7B68EE;
+            border-color: #7B68EE;
+        }
+        .custom-container {
+            padding: 30px;
+            border-radius: 20px;
+            width: 350px;
+        }
+        .custom-form {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
-<div class="mx-auto position-absolute top-50 start-50 translate-middle border" style="width: 300px;">
-    <h1 class="h3 mb-3 fw-normal">Панель Управления</h1>
-    <form action="/exposition/add">
-        <button class="btn btn-primary rounded-pill px-3 " type="submit">Добавить Выставку</button>
+<div class="mx-auto position-absolute top-50 start-50 translate-middle border custom-container">
+    <h1 class="h3 mb-3 fw-normal text-center">Панель Управления</h1>
+    <form action="/exposition/add" class="custom-form">
+        <button class="btn btn-primary custom-button w-100 py-2" type="submit">Добавить Выставку</button>
         <br> <br>
     </form>
-    <form action="/art/add">
-        <button class="btn btn-primary rounded-pill px-3 " type="submit">Добавить Картину</button>
+    <form action="/art/add" class="custom-form">
+        <button class="btn btn-primary custom-button w-100 py-2" type="submit">Добавить Картину</button>
         <br> <br>
-    </form>
-    <form action="/">
-        <button class="btn btn-primary rounded-pill px-3 " type="submit">Добавить Администратора</button>
-        <br>
     </form>
 </div>
 <footer th:insert="blocks/footer :: footer" class="mt-auto fixed-bottom"></footer>

@@ -1,21 +1,22 @@
 package com.example.katarsisblog.controllers;
 
 import com.example.katarsisblog.models.ArtImage;
-import com.example.katarsisblog.models.Exposition;
 import com.example.katarsisblog.models.Image;
+import com.example.katarsisblog.models.UserDTO;
 import com.example.katarsisblog.repo.ArtImageRepository;
+import com.example.katarsisblog.repo.FavouritesRepository;
 import com.example.katarsisblog.repo.ImageRepository;
+import com.example.katarsisblog.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class ArtController {
@@ -23,11 +24,38 @@ public class ArtController {
     private ArtImageRepository artImageRepository;
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private FavouritesRepository favouritesRepository;
 
     @GetMapping("/art")
     public String artMain(Model model) {
+        Set<ArtImage> favourites = Set.of();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getPrincipal().toString().equals("anonymousUser")) {
+            String userName = authentication.getName();
+            UserDTO user = userRepository.findByName(userName).orElseThrow();
+            favourites = user.getFavourites().getArtImages();
+        }
         Iterable<ArtImage> artImages = artImageRepository.findAll();
         model.addAttribute("artImages",artImages);
+        model.addAttribute("favourites",favourites);
+        return "art/art-main";
+    }
+
+    @GetMapping("/art/search")
+    public String searchArt(@RequestParam String query, Model model) {
+        Set<ArtImage> favourites = Set.of();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getPrincipal().toString().equals("anonymousUser")) {
+            String userName = authentication.getName();
+            UserDTO user = userRepository.findByName(userName).orElseThrow();
+            favourites = user.getFavourites().getArtImages();
+        }
+        List<ArtImage> artImages = artImageRepository.findByNameStartingWith(query);
+        model.addAttribute("artImages", artImages);
+        model.addAttribute("favourites", favourites);
         return "art/art-main";
     }
 
@@ -40,11 +68,10 @@ public class ArtController {
     public String artAdd(@RequestParam String name, @RequestParam String anons,
                          @RequestParam String description, @RequestParam String url,
                          Model model) {
-        ArtImage artImage = new ArtImage(name,description,anons,new Image(url));
+        ArtImage artImage = new ArtImage(name, description, anons, new Image(url));
         artImageRepository.save(artImage);
         return "redirect:/art";
     }
-
 
     @GetMapping("/art/{id}")
     public String artDetails(@PathVariable(value = "id") long id, Model model) {
